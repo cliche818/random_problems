@@ -4,16 +4,36 @@ defmodule Plus do
   """
 
   @doc """
+  find_biggest_horizontal
+  ## Examples
+
+      iex> Plus.find_biggest_horizontal([["B", "G", "B"], ["G", "B", "G"], ["B", "G", "B"]], 1, 1)
+      0
+
+      iex> Plus.find_biggest_horizontal([["B", "G", "B"], ["G", "G", "G"], ["B", "G", "B"]], 1, 1)
+      3
+
+      iex> Plus.find_biggest_horizontal([["B", "B", "B"], ["B", "G", "G"], ["B", "B", "B"]], 1, 1)
+      1
+
+  """
+  def find_biggest_horizontal(grid, row, column) do
+    if value_at(grid, row, column)  == "B" do
+      0
+    else
+      horizontal = Enum.at(grid, row)
+      length(get_biggest_line(horizontal, column))
+    end
+  end
+
+  @doc """
   find_biggest_vertical
   ## Examples
 
       iex> Plus.find_biggest_vertical([["B", "G", "B"], ["G", "B", "G"], ["B", "G", "B"]], 1, 1)
       0
 
-      iex> Plus.find_biggest_vertical([["B", "G", "B"], ["G", "B", "G"], ["B", "G", "B"]], 1, 1)
-      0
-
-      iex> Plus.find_biggest_vertical([["B", "G", "B"], ["G", "G", "G"], ["B", "G", "B"]], 1, 1)
+      iex> Plus.find_biggest_vertical([["B", "G", "B"], ["B", "G", "B"], ["B", "G", "B"]], 1, 1)
       3
 
       iex> Plus.find_biggest_vertical([["B", "B", "B"], ["G", "G", "G"], ["B", "G", "B"]], 1, 1)
