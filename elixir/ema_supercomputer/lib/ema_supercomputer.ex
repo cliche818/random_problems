@@ -49,7 +49,7 @@ defmodule EmaSupercomputer do
     |> Enum.with_index
     |> Enum.map(fn({_, column}) ->
       row = elem(column_data, 0)
-      %{row: row, column: column, size: Plus.find_biggest_plus(grid, row, column)}
+      %Plus{row: row, column: column, size: Plus.find_biggest_plus(grid, row, column)}
     end)
 
     list_of_pluses
