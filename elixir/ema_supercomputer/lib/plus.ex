@@ -3,6 +3,73 @@ defmodule Plus do
   Documentation for Plus.
   """
 
+  @enforce_keys [:column, :row, :size]
+  defstruct [:column, :row, :size]
+
+  @doc """
+  overlap?
+  ## Examples
+    iex> Plus.overlap?(%Plus{column: 0, row: 0, size: 1}, %Plus{column: 1, row: 1, size: 1})
+    false
+    iex> Plus.overlap?(%Plus{column: 1, row: 0, size: 1}, %Plus{column: 1, row: 1, size: 5})
+    true
+    iex> Plus.overlap?(%Plus{column: 5, row: 1, size: 5}, %Plus{column: 5, row: 4, size: 5})
+    false
+    iex> Plus.overlap?(%Plus{column: 5, row: 4, size: 5}, %Plus{column: 5, row: 1, size: 5})
+    false
+    iex> Plus.overlap?(%Plus{column: 1, row: 3, size: 5}, %Plus{column: 4, row: 3, size: 5})
+    false
+    iex> Plus.overlap?(%Plus{column: 3, row: 3, size: 5}, %Plus{column: 1, row: 3, size: 5})
+    true
+  """
+  def overlap?(%Plus{} = plus1, %Plus{} = plus2) do
+    plus1_modifier = if (plus1.size == 1), do: 1, else: (plus1.size - 1) / 4
+    plus2_modifier = if (plus2.size == 1), do: 1, else: (plus2.size - 1) / 4
+
+    cond do
+      plus1.size == 1 and plus2.size == 1 ->
+        false
+      plus1.row == plus2.row and plus1.column < plus2.column and plus1.column + plus1_modifier >= plus2.column - plus2_modifier ->
+        true
+      plus1.row == plus2.row and plus2.column < plus1.column and plus2.column + plus2_modifier >= plus1.column - plus1_modifier ->
+        true
+      plus1.column == plus2.column and plus1.row < plus2.row and plus1.row + plus1_modifier >= plus2.row - plus2_modifier ->
+        true
+      plus1.column == plus2.column and plus2.row < plus1.row and plus2.row + plus2_modifier >= plus1.row - plus1_modifier ->
+        true
+      true ->
+        false
+    end
+  end
+
+  @doc """
+  find_biggest_plus
+  ## Examples
+    iex> Plus.find_biggest_plus([["B", "G", "B"], ["G", "G", "G"], ["B", "G", "B"]], 1, 1)
+    5
+
+    iex> Plus.find_biggest_plus([["B", "B", "B"], ["G", "G", "G"], ["B", "G", "B"]], 1, 1)
+    1
+
+    iex> Plus.find_biggest_plus([["B", "G", "B"], ["B", "G", "B"], ["B", "G", "B"]], 1, 1)
+    1
+  """
+  def find_biggest_plus(grid, row, column) do
+    vertical = find_biggest_vertical(grid, row, column)
+    horizontal = find_biggest_horizontal(grid, row, column)
+
+    cond do
+      vertical == 1 ->
+        1
+      horizontal == 1 ->
+        1
+      vertical == horizontal ->
+        vertical + horizontal - 1
+      true ->
+        min(vertical, horizontal) + 1
+    end
+  end
+
   @doc """
   find_biggest_horizontal
   ## Examples
