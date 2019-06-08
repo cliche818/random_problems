@@ -21,13 +21,17 @@ defmodule Plus do
     false
     iex> Plus.overlap?(%Plus{column: 3, row: 3, size: 5}, %Plus{column: 1, row: 3, size: 5})
     true
+    iex> Plus.overlap?(%Plus{column: 0, row: 0, size: 1}, %Plus{column: 0, row: 0, size: 1})
+    true
   """
   def overlap?(%Plus{} = plus1, %Plus{} = plus2) do
     plus1_modifier = if (plus1.size == 1), do: 1, else: (plus1.size - 1) / 4
     plus2_modifier = if (plus2.size == 1), do: 1, else: (plus2.size - 1) / 4
 
     cond do
-      plus1.size == 1 and plus2.size == 1 ->
+      plus1.column == plus2.column and plus1.row == plus2.row ->
+        true
+      plus1.size == 1 and plus2.size == 1 and plus1.column != plus2.column and plus1.row != plus2.row ->
         false
       plus1.row == plus2.row and plus1.column < plus2.column and plus1.column + plus1_modifier >= plus2.column - plus2_modifier ->
         true

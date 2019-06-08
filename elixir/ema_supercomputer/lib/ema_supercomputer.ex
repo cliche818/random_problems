@@ -29,17 +29,30 @@ defmodule EmaSupercomputer do
     end)
     |> Enum.concat
 
-    # IO.inspect(list_of_pluses)
-
-    1
+    find_biggest_product(list_of_pluses)
   end
 
   @doc """
+  ## Examples
+      iex> EmaSupercomputer.find_biggest_product([%Plus{column: 0, row: 0, size: 1},%Plus{column: 0, row: 1, size: 1}, %Plus{column: 1, row: 1, size: 1},%Plus{column: 2, row: 1, size: 1}])
+      1
 
   """
   def find_biggest_product(list) do
+    viable_list = for plus1 <- list,
+                      plus2 <- list,
+                      !Plus.overlap?(plus1, plus2),
+                      do: {plus1, plus2}
 
+    highest_pluses = Enum.max_by(viable_list, fn ({x,y}) -> x.size * y.size end)
+
+    plus_one = elem(highest_pluses, 1)
+    plus_two = elem(highest_pluses, 1)
+
+    plus_one.size * plus_two.size
   end
+
+
 
   defp get_biggest_plus(column_data, grid) do
     # IO.inspect(column_data)
@@ -54,6 +67,4 @@ defmodule EmaSupercomputer do
 
     list_of_pluses
   end
-
-
 end
