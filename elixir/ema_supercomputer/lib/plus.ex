@@ -70,7 +70,7 @@ defmodule Plus do
       vertical == horizontal ->
         vertical + horizontal - 1
       true ->
-        min(vertical, horizontal) + 1
+        min(vertical, horizontal) * 2 - 1
     end
   end
 
@@ -116,7 +116,7 @@ defmodule Plus do
       0
     else
       vertical = get_column(grid, column)
-      length(get_biggest_line(vertical, row))
+      length(Plus.get_biggest_line(vertical, row))
     end
   end
 
@@ -146,6 +146,9 @@ defmodule Plus do
       ["G","G","G"]
 
       iex> Plus.get_biggest_line(["G", "G", "G"], 0)
+      ["G"]
+
+      iex> Plus.get_biggest_line(["G", "B", "G", "B", "G"], 2)
       ["G"]
   """
 
